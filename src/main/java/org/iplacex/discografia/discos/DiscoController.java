@@ -11,8 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
 
-import org.iplacex.discografia.artistas.IArtistaRepository;
+import org.iplacex.discografia.artistas.ArtistaRepository;
 
 @RestController
 @CrossOrigin
@@ -23,7 +24,7 @@ public class DiscoController {
     private IDiscoRepository discoRepository;
 
     @Autowired
-    private IArtistaRepository artistaRepository;
+    private ArtistaRepository artistaRepository;
 @PostMapping(
     value = "/disco",
     consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -122,6 +123,44 @@ public ResponseEntity<List<Disco>> HandleGetDiscosByArtistaRequest(
         return ResponseEntity
                 .status(500)
                 .body(null);
+    }
+}
+@PutMapping(
+    value = "/disco/{id}",
+    consumes = MediaType.APPLICATION_JSON_VALUE,
+    produces = MediaType.APPLICATION_JSON_VALUE
+)
+public ResponseEntity<Object> HandlePutDiscoRequest(
+        @PathVariable String id,
+        @RequestBody Disco disco) {
+
+    try {
+
+        if (!discoRepository.existsById(id)) {
+            return ResponseEntity
+                    .status(404)
+                    .body("Disco no encontrado");
+        }
+
+        if (!artistaRepository.existsById(disco.idArtista)) {
+            return ResponseEntity
+                    .status(404)
+                    .body("Artista no encontrado");
+        }
+
+        disco._id = id;
+
+        Disco discoActualizado = discoRepository.save(disco);
+
+        return ResponseEntity
+                .status(200)
+                .body(discoActualizado);
+
+    } catch (Exception e) {
+
+        return ResponseEntity
+                .status(500)
+                .body("Error al actualizar el disco");
     }
 }
 }

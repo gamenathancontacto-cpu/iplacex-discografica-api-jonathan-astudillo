@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
-
-import org.iplacex.discografia.artistas.ArtistaRepository;
+import org.iplacex.discografia.artistas.IArtistaRepository;
 
 @RestController
 @CrossOrigin
@@ -24,7 +23,7 @@ public class DiscoController {
     private IDiscoRepository discoRepository;
 
     @Autowired
-    private ArtistaRepository artistaRepository;
+    private IArtistaRepository artistaRepository;
 @PostMapping(
     value = "/disco",
     consumes = MediaType.APPLICATION_JSON_VALUE,
